@@ -24,6 +24,12 @@ export default function DrawerLayout() {
           }}
         />
         <Drawer.Screen
+          name="(tabs)"
+          options={{
+            drawerItemStyle: { display: 'none' },
+          }}
+        />
+        <Drawer.Screen
           name="tweets/[view]"
           options={{
             drawerItemStyle: { display: 'none' },
