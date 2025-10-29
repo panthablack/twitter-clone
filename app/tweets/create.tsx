@@ -6,7 +6,7 @@ export default function Index() {
   return (
     <View style={styles.views.home.containers.page}>
       <View style={styles.views.home.containers.elements}>
-        <Text style={styles.text.primary}>Hello, Joe!</Text>
+        <Text style={styles.text.primary}>Create a New Tweet!</Text>
         <NavButtons />
       </View>
     </View>
