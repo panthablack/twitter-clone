@@ -1,5 +1,12 @@
-import DrawerLayout from '@/layouts/DrawerLayout'
+import { Stack } from 'expo-router'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
 
 export default function RootLayout() {
-  return <DrawerLayout />
+  return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <Stack>
+        <Stack.Screen name="(drawer)" options={{ headerTitle: 'Dashboard' }} />
+      </Stack>
+    </GestureHandlerRootView>
+  )
 }

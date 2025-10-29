@@ -2,11 +2,11 @@ import NavButtons from '@/components/NavButtons'
 import { styles } from '@/styles/styles'
 import { Text, View } from 'react-native'
 
-export default function TabsIndex() {
+export default function TabsSettingsScreen() {
   return (
     <View style={styles.views.home.containers.page}>
       <View style={styles.views.home.containers.elements}>
-        <Text style={styles.text.primary}>Tabs Hello, Joe! This is tab!</Text>
+        <Text style={styles.text.primary}>Support me!</Text>
         <NavButtons />
       </View>
     </View>
