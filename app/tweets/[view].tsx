@@ -3,7 +3,7 @@ import { styles } from '@/styles/styles'
 import { useLocalSearchParams } from 'expo-router'
 import { Text, View } from 'react-native'
 
-export default function Index() {
+export default function ViewTweetScreen() {
   const params = useLocalSearchParams()
 
   return (
