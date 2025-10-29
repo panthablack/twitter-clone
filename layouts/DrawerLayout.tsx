@@ -12,6 +12,12 @@ export default function DrawerLayout() {
           }}
         />
         <Drawer.Screen
+          name="settings"
+          options={{
+            title: 'Settings',
+          }}
+        />
+        <Drawer.Screen
           name="tweets/create"
           options={{
             title: 'Create Tweet',
