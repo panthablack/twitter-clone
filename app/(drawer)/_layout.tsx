@@ -10,18 +10,6 @@ export default function DrawerLayout() {
         }}
       />
       <Drawer.Screen
-        name="settings"
-        options={{
-          title: 'Settings',
-        }}
-      />
-      <Drawer.Screen
-        name="support"
-        options={{
-          title: 'Support',
-        }}
-      />
-      <Drawer.Screen
         name="tweets/create"
         options={{
           title: 'Create Tweet',
@@ -30,7 +18,9 @@ export default function DrawerLayout() {
       <Drawer.Screen
         name="(tabs)"
         options={{
-          drawerItemStyle: { display: 'none' },
+          title: 'Settings',
+          headerShown: false,
+          // drawerItemStyle: { display: 'none' },
         }}
       />
       <Drawer.Screen

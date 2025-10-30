@@ -6,7 +6,7 @@ export default function TabsSettingsScreen() {
   return (
     <View style={styles.views.home.containers.page}>
       <View style={styles.views.home.containers.elements}>
-        <Text style={styles.text.primary}>Support me!</Text>
+        <Text style={styles.text.primary}>Support in tabs, yo!</Text>
         <NavButtons />
       </View>
     </View>
