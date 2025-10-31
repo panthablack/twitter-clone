@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native'
 
-export const styleUtilities = StyleSheet.create({
+export const utilityStyles = StyleSheet.create({
   flexRow: {
     flexDirection: 'row',
   },

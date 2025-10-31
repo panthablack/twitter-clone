@@ -4,8 +4,8 @@ import { Text, View } from 'react-native'
 
 export default function SupportScreen() {
   return (
-    <View style={styles.views.home.containers.page}>
-      <View style={styles.views.home.containers.elements}>
+    <View style={styles.component.page}>
+      <View style={styles.component.elements}>
         <Text style={styles.text.primary}>Support in tabs, yo!</Text>
         <NavButtons />
       </View>

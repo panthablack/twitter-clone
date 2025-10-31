@@ -6,7 +6,7 @@ export default function NavButtons() {
   const router = useRouter()
 
   return (
-    <View style={styles.views.home.containers.buttons}>
+    <View style={styles.component.buttons}>
       <Button color="#efc0c0" title="Go Home" onPress={() => router.navigate('/')} />
       <Button
         color="#efc0c0"

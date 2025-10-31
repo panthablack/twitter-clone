@@ -1,4 +1,4 @@
-import { styleUtilities } from '@/styles/styleUtilities'
+import { styles } from '@/styles/styles'
 import AntDesign from '@expo/vector-icons/AntDesign'
 import EvilIcons from '@expo/vector-icons/EvilIcons'
 import { useRouter } from 'expo-router'
@@ -61,7 +61,7 @@ const TweetCard = ({ tweet }: TweetProps) => {
         />
       </TouchableOpacity>
       <View style={tweetCardStyles.wrapper}>
-        <TouchableOpacity style={{ ...styleUtilities.flexRow, ...tweetCardStyles.headerContainer }}>
+        <TouchableOpacity style={{ ...styles.utility.flexRow, ...tweetCardStyles.headerContainer }}>
           <Text numberOfLines={1} style={tweetCardStyles.name}>
             {tweet.name}
           </Text>
@@ -120,15 +120,15 @@ export default function Home() {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={pageStyles.container}>
       <FlatList
         data={FAKE_DATA}
         renderItem={({ item: tweet }) => <TweetCard tweet={tweet} />}
         keyExtractor={(tweet: Tweet) => tweet.id}
-        ItemSeparatorComponent={() => <View style={styles.tweetSeparator}></View>}
+        ItemSeparatorComponent={() => <View style={pageStyles.tweetSeparator}></View>}
       />
       <TouchableOpacity
-        style={[styles.floatingButton, { bottom: insets.bottom + 20 }]}
+        style={[pageStyles.floatingButton, { bottom: insets.bottom + 20 }]}
         onPress={() => goToCreateTweet()}
       >
         <AntDesign name="plus" size={24} color="white" />
@@ -137,7 +137,7 @@ export default function Home() {
   )
 }
 
-const styles = StyleSheet.create({
+const pageStyles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',

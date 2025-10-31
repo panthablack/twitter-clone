@@ -1,13 +1,11 @@
-import { images } from '@/styles/images/images'
-import { text } from '@/styles/text/text'
-import { views } from '@/styles/views/views'
-import { NestedStyles } from '@/types/styles'
-import { StyleSheet } from 'react-native'
+import { componentStyles } from './components/componentStyles'
+import { imageStyles } from './images/imageStyles'
+import { textStyles } from './text/textStyles'
+import { utilityStyles } from './utilities/utilityStyles'
 
-const rawStyles: NestedStyles = {
-  images,
-  text,
-  views,
-}
-
-export const styles = StyleSheet.create(rawStyles)
+export const styles = {
+  component: componentStyles,
+  image: imageStyles,
+  text: textStyles,
+  utility: utilityStyles,
+} as const

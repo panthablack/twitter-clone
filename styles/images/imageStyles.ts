@@ -5,3 +5,7 @@ export const hero: ImageStyle = {
   justifyContent: 'center',
   alignItems: 'center',
 }
+
+export const imageStyles = {
+  hero,
+}

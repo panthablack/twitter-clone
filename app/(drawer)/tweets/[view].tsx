@@ -7,8 +7,8 @@ export default function ViewTweetScreen() {
   const params = useLocalSearchParams()
 
   return (
-    <View style={styles.views.home.containers.page}>
-      <View style={styles.views.home.containers.elements}>
+    <View style={styles.component.page}>
+      <View style={styles.component.elements}>
         <Text style={styles.text.primary}>View tweet: {params.view || 'View not found'}!</Text>
         <NavButtons />
       </View>
