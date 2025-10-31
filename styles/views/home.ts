@@ -5,7 +5,8 @@ const page: ViewStyle = {
   flex: 1,
   justifyContent: 'center',
   alignItems: 'center',
-  backgroundColor: '#c0eec0',
+  backgroundColor: '#fff',
+  paddingTop: 8,
 }
 
 const elements: ViewStyle = {

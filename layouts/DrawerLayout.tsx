@@ -6,7 +6,7 @@ export default function DrawerLayout() {
       <Drawer.Screen
         name="index"
         options={{
-          title: 'Dashboard',
+          title: 'Home',
         }}
       />
       <Drawer.Screen

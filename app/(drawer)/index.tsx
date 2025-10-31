@@ -1,5 +1,5 @@
-import Dashboard from '@/screens/Dashboard'
+import Home from '@/screens/Home'
 
 export default function Index() {
-  return <Dashboard />
+  return <Home />
 }
