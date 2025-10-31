@@ -62,10 +62,10 @@ const TweetCard = ({ tweet }: TweetProps) => {
       </TouchableOpacity>
       <View style={tweetCardStyles.wrapper}>
         <TouchableOpacity style={{ ...styles.utility.flexRow, ...tweetCardStyles.headerContainer }}>
-          <Text numberOfLines={1} style={tweetCardStyles.name}>
+          <Text numberOfLines={1} style={styles.text.username}>
             {tweet.name}
           </Text>
-          <Text numberOfLines={1} style={tweetCardStyles.handle}>
+          <Text numberOfLines={1} style={styles.text.handle}>
             {tweet.handle}
           </Text>
           <Text numberOfLines={1} style={tweetCardStyles.dot}>
@@ -238,17 +238,7 @@ const tweetCardStyles = StyleSheet.create({
     alignItems: 'center',
     gap: 4,
   },
-  name: {
-    fontSize: 12,
-    fontWeight: 'bold',
-    color: '#222222',
-    flexShrink: 1,
-  },
-  handle: {
-    color: '#777',
-    fontSize: 12,
-    flexShrink: 1,
-  },
+
   dot: {
     fontSize: 12,
     flexShrink: 1,

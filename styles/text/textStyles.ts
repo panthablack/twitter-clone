@@ -6,4 +6,17 @@ export const primary: TextStyle = {
   fontWeight: 'bold',
 }
 
-export const textStyles = StyleSheet.create({ primary })
+export const handle: TextStyle = {
+  color: '#777',
+  fontSize: 12,
+  flexShrink: 1,
+}
+
+export const username: TextStyle = {
+  fontSize: 12,
+  fontWeight: 'bold',
+  color: '#222222',
+  flexShrink: 1,
+}
+
+export const textStyles = StyleSheet.create({ primary, handle, username })
