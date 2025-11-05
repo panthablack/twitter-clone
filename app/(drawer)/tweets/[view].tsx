@@ -1,8 +1,9 @@
+import ProfileAvatar from '@/components/ProfileAvatar'
 import { styles } from '@/styles/styles'
 import Entypo from '@expo/vector-icons/Entypo'
 import EvilIcons from '@expo/vector-icons/EvilIcons'
 import { useLocalSearchParams, useRouter } from 'expo-router'
-import { Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
 export default function ViewTweetScreen() {
   const params = useLocalSearchParams()
@@ -17,19 +18,18 @@ export default function ViewTweetScreen() {
   return (
     <View style={pageStyles.container}>
       <View style={profileStyles.container}>
-        <TouchableOpacity
-          style={styles.utility.flexRow}
-          onPress={() => goToProfile(String(params.id))}
-        >
-          <Image
-            style={profileStyles.avatar}
-            source={{ uri: 'https://reactnative.dev/img/tiny_logo.png' }}
-          />
-          <View>
-            <Text style={styles.text.username}>James Randall</Text>
-            <Text style={styles.text.handle}>@panthablack</Text>
-          </View>
-        </TouchableOpacity>
+        <View style={styles.utility.flexRow}>
+          <ProfileAvatar />
+          <TouchableOpacity
+            style={styles.utility.flexRow}
+            onPress={() => goToProfile(String(params.id))}
+          >
+            <View>
+              <Text style={styles.text.username}>James Randall</Text>
+              <Text style={styles.text.handle}>@panthablack</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
         <TouchableOpacity>
           <Entypo name="dots-three-vertical" size={24} color="gray" />
         </TouchableOpacity>

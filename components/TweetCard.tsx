@@ -1,17 +1,11 @@
 import { styles } from '@/styles/styles'
 import EvilIcons from '@expo/vector-icons/EvilIcons'
 import { useRouter } from 'expo-router'
-import { Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import ProfileAvatar from './ProfileAvatar'
 
 export default function TweetCard({ tweet }: TweetProps) {
   const router = useRouter()
-
-  const goToProfile = (id: string) => {
-    router.navigate({
-      pathname: '/profile',
-      params: { id },
-    })
-  }
 
   const goToTweet = (id: string) => {
     router.navigate({
@@ -22,12 +16,7 @@ export default function TweetCard({ tweet }: TweetProps) {
 
   return (
     <View style={tweetCardStyles.container}>
-      <TouchableOpacity onPress={() => goToProfile(tweet.id)}>
-        <Image
-          style={tweetCardStyles.avatar}
-          source={{ uri: 'https://reactnative.dev/img/tiny_logo.png' }}
-        />
-      </TouchableOpacity>
+      <ProfileAvatar />
       <View style={tweetCardStyles.wrapper}>
         <TouchableOpacity style={{ ...styles.utility.flexRow, ...tweetCardStyles.headerContainer }}>
           <Text numberOfLines={1} style={styles.text.username}>
