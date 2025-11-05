@@ -1,8 +1,11 @@
 import ProfileAvatar from '@/components/ProfileAvatar'
+import { API_ROOT_URL } from '@/constants/networking'
 import { styles } from '@/styles/styles'
+import { api } from '@/utilities/api'
 import Entypo from '@expo/vector-icons/Entypo'
 import EvilIcons from '@expo/vector-icons/EvilIcons'
 import { useLocalSearchParams, useRouter } from 'expo-router'
+import { useEffect, useState } from 'react'
 import { Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
 export default function ViewTweetScreen() {
@@ -15,70 +18,81 @@ export default function ViewTweetScreen() {
       params: { id },
     })
   }
+
+  const [tweet, setTweet] = useState(null as Tweet | null)
+
+  useEffect(() => {
+    api(`${API_ROOT_URL}/tweets/${params.view}`).then(res => {
+      setTweet(res.data)
+    })
+  }, [params.view])
+
   return (
     <View style={pageStyles.container}>
-      <View style={profileStyles.container}>
-        <View style={styles.utility.flexRow}>
-          <ProfileAvatar />
-          <TouchableOpacity
-            style={styles.utility.flexRow}
-            onPress={() => goToProfile(String(params.id))}
-          >
-            <View>
-              <Text style={styles.text.username}>James Randall</Text>
-              <Text style={styles.text.handle}>@panthablack</Text>
+      {tweet ? (
+        <View>
+          <View style={profileStyles.container}>
+            <View style={styles.utility.flexRow}>
+              <ProfileAvatar user={tweet?.user} />
+              <TouchableOpacity
+                style={styles.utility.flexRow}
+                onPress={() => goToProfile(String(tweet.user.id))}
+              >
+                <View>
+                  <Text style={styles.text.username}>{tweet.user.name}</Text>
+                  <Text style={styles.text.handle}>@{tweet.user.handle}</Text>
+                </View>
+              </TouchableOpacity>
             </View>
-          </TouchableOpacity>
+            <TouchableOpacity>
+              <Entypo name="dots-three-vertical" size={24} color="gray" />
+            </TouchableOpacity>
+          </View>
+          <View style={tweetStyles.container}>
+            <Text style={tweetStyles.text}>{tweet.body}</Text>
+          </View>
+          <View style={tweetStatsStyles.container}>
+            <View style={tweetStatsStyles.innerContainer}>
+              <Text style={tweetStatsStyles.statValue}>42689</Text>
+              <Text style={tweetStatsStyles.statName}>Retweets</Text>
+            </View>
+            <View style={tweetStatsStyles.innerContainer}>
+              <Text style={tweetStatsStyles.statValue}>849</Text>
+              <Text style={tweetStatsStyles.statName}>Quote Tweets</Text>
+            </View>
+            <View style={tweetStatsStyles.innerContainer}>
+              <Text style={tweetStatsStyles.statValue}>2744</Text>
+              <Text style={tweetStatsStyles.statName}>Likes</Text>
+            </View>
+          </View>
+          <View style={tweetEngagementStyles.container}>
+            <TouchableOpacity style={tweetEngagementStyles.commentWrapper}>
+              <EvilIcons name="comment" size={24} color="gray" />
+              <Text style={tweetEngagementStyles.numComments}>482</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={tweetEngagementStyles.retweetWrapper}>
+              <EvilIcons name="retweet" size={24} color="gray" />
+              <Text style={tweetEngagementStyles.numRetweets}>1952</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={tweetEngagementStyles.heartsWrapper}>
+              <EvilIcons name="heart" size={24} color="gray" />
+              <Text style={tweetEngagementStyles.numHearts}>20609</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={tweetEngagementStyles.shareWrapper}>
+              <EvilIcons
+                name={Platform.OS === 'ios' ? 'share-apple' : 'share-google'}
+                size={24}
+                color="gray"
+              />
+            </TouchableOpacity>
+          </View>
+          <View style={commentsStyles.container}>
+            <Text>Comments:</Text>
+          </View>
         </View>
-        <TouchableOpacity>
-          <Entypo name="dots-three-vertical" size={24} color="gray" />
-        </TouchableOpacity>
-      </View>
-      <View style={tweetStyles.container}>
-        <Text style={tweetStyles.text}>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque quia sequi ullam ipsum
-          tempore maiores maxime amet quidem, laborum aperiam debitis voluptatum inventore pariatur
-          expedita iusto sed eum consectetur praesentium.
-        </Text>
-      </View>
-      <View style={tweetStatsStyles.container}>
-        <View style={tweetStatsStyles.innerContainer}>
-          <Text style={tweetStatsStyles.statValue}>42689</Text>
-          <Text style={tweetStatsStyles.statName}>Retweets</Text>
-        </View>
-        <View style={tweetStatsStyles.innerContainer}>
-          <Text style={tweetStatsStyles.statValue}>849</Text>
-          <Text style={tweetStatsStyles.statName}>Quote Tweets</Text>
-        </View>
-        <View style={tweetStatsStyles.innerContainer}>
-          <Text style={tweetStatsStyles.statValue}>2744</Text>
-          <Text style={tweetStatsStyles.statName}>Likes</Text>
-        </View>
-      </View>
-      <View style={tweetEngagementStyles.container}>
-        <TouchableOpacity style={tweetEngagementStyles.commentWrapper}>
-          <EvilIcons name="comment" size={24} color="gray" />
-          <Text style={tweetEngagementStyles.numComments}>482</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={tweetEngagementStyles.retweetWrapper}>
-          <EvilIcons name="retweet" size={24} color="gray" />
-          <Text style={tweetEngagementStyles.numRetweets}>1952</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={tweetEngagementStyles.heartsWrapper}>
-          <EvilIcons name="heart" size={24} color="gray" />
-          <Text style={tweetEngagementStyles.numHearts}>20609</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={tweetEngagementStyles.shareWrapper}>
-          <EvilIcons
-            name={Platform.OS === 'ios' ? 'share-apple' : 'share-google'}
-            size={24}
-            color="gray"
-          />
-        </TouchableOpacity>
-      </View>
-      <View style={commentsStyles.container}>
-        <Text>Comments:</Text>
-      </View>
+      ) : (
+        ''
+      )}
     </View>
   )
 }

@@ -1,12 +1,33 @@
 import TweetList from '@/components/TweetList'
+import { API_ROOT_URL } from '@/constants/networking'
+import { api } from '@/utilities/api'
 import AntDesign from '@expo/vector-icons/AntDesign'
 import { useRouter } from 'expo-router'
+import { useEffect, useState } from 'react'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 export default function Home() {
   const insets = useSafeAreaInsets()
   const router = useRouter()
+  const [tweets, setTweets] = useState([] as Tweet[])
+
+  useEffect(() => {
+    api(`${API_ROOT_URL}/tweets`).then(res => {
+      const mapped: Tweet[] = (res?.data || []).map((i: Record<string, any>) => ({
+        id: i.id,
+        body: i.body,
+        user: {
+          id: i.user.id,
+          name: i.user.name,
+          handle: i.user.handle,
+          avatar_url: i.user.avatar_url,
+        },
+        time: i.created_at,
+      }))
+      setTweets(() => mapped)
+    })
+  }, [])
 
   const goToCreateTweet = () => {
     router.navigate({
@@ -16,7 +37,7 @@ export default function Home() {
 
   return (
     <View style={pageStyles.container}>
-      <TweetList />
+      <TweetList tweets={tweets} />
       <TouchableOpacity
         style={[pageStyles.floatingButton, { bottom: insets.bottom + 20 }]}
         onPress={() => goToCreateTweet()}

@@ -1,62 +1,93 @@
 import TweetList from '@/components/TweetList'
+import { API_ROOT_URL } from '@/constants/networking'
+import { api } from '@/utilities/api'
 import EvilIcons from '@expo/vector-icons/EvilIcons'
+import { useLocalSearchParams } from 'expo-router'
+import { useEffect, useState } from 'react'
 import { Image, Linking, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
 export default function ProfileScreen() {
+  const params = useLocalSearchParams()
+
+  const [user, setUser] = useState(null as User | null)
+
+  const [tweets, setTweets] = useState([] as Tweet[])
+
+  useEffect(() => {
+    api(`${API_ROOT_URL}/users/${params.id}`).then(res => {
+      const serverUser = res?.data || null
+
+      const profileUser: User | null = serverUser?.id
+        ? {
+            id: serverUser.id,
+            name: serverUser.name,
+            handle: serverUser.handle,
+            avatar_url: serverUser.avatar_url,
+          }
+        : null
+
+      setUser(profileUser)
+
+      // TODO: Set tweets based on user
+      setTweets([])
+    })
+  }, [params.id])
+
   return (
     <View style={pageStyles.container}>
-      <ScrollView>
-        <Image style={pageStyles.bgImage} source={require('@/assets/photos/hill-photo.jpg')} />
-        <View style={profileStyles.avatarContainer}>
-          <Image
-            style={profileStyles.avatar}
-            source={{ uri: 'https://reactnative.dev/img/tiny_logo.png' }}
-          />
-          <TouchableOpacity style={profileStyles.followButton}>
-            <Text style={profileStyles.followButtonText}>Follow</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={profileStyles.nameContainer}>
-          <Text style={profileStyles.username}>James Randall</Text>
-          <Text style={profileStyles.handle}>@panthablack</Text>
-        </View>
-        <View style={profileStyles.descriptionContainer}>
-          <Text style={profileStyles.description}>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsam nemo aperiam fugiat magni
-            delectus nesciunt soluta. Reprehenderit repellat dolore nemo velit illo iusto,
-            perspiciatis, facere porro quisquam, suscipit laborum. Cupiditate!
-          </Text>
-        </View>
-        <View style={profileStyles.locationContainer}>
-          <EvilIcons name="location" size={24} color="gray" />
-          <Text style={profileStyles.locationText}>Melbourne, Australia</Text>
-        </View>
-        <View style={profileStyles.linkContainer}>
-          <TouchableOpacity
-            style={profileStyles.linkItem}
-            onPress={() => Linking.openURL('https://manmachineltd.com')}
-          >
-            <EvilIcons name="link" size={24} color="gray" />
-            <Text style={profileStyles.hyperlinkText}>ManMachine</Text>
-          </TouchableOpacity>
-          <View style={profileStyles.linkItem}>
-            <EvilIcons name="calendar" size={24} color="gray" />
-            <Text style={profileStyles.linkText}>Joined April 2011</Text>
+      {user ? (
+        <ScrollView>
+          <Image style={pageStyles.bgImage} source={require('@/assets/photos/hill-photo.jpg')} />
+          <View style={profileStyles.avatarContainer}>
+            <Image style={profileStyles.avatar} source={{ uri: user.avatar_url }} />
+            <TouchableOpacity style={profileStyles.followButton}>
+              <Text style={profileStyles.followButtonText}>Follow</Text>
+            </TouchableOpacity>
           </View>
-        </View>
-        <View style={followerStyles.wrapper}>
-          <View style={followerStyles.container}>
-            <Text style={followerStyles.count}>989</Text>
-            <Text style={followerStyles.text}>Following</Text>
+          <View style={profileStyles.nameContainer}>
+            <Text style={profileStyles.username}>{user.name}</Text>
+            <Text style={profileStyles.handle}>@{user.handle}</Text>
           </View>
-          <View style={followerStyles.container}>
-            <Text style={followerStyles.count}>2,864</Text>
-            <Text style={followerStyles.text}>Followers</Text>
+          <View style={profileStyles.descriptionContainer}>
+            <Text style={profileStyles.description}>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsam nemo aperiam fugiat
+              magni delectus nesciunt soluta. Reprehenderit repellat dolore nemo velit illo iusto,
+              perspiciatis, facere porro quisquam, suscipit laborum. Cupiditate!
+            </Text>
           </View>
-        </View>
-        <View style={pageStyles.separator} />
-        <TweetList scrollEnabled={false} />
-      </ScrollView>
+          <View style={profileStyles.locationContainer}>
+            <EvilIcons name="location" size={24} color="gray" />
+            <Text style={profileStyles.locationText}>Melbourne, Australia</Text>
+          </View>
+          <View style={profileStyles.linkContainer}>
+            <TouchableOpacity
+              style={profileStyles.linkItem}
+              onPress={() => Linking.openURL('https://manmachineltd.com')}
+            >
+              <EvilIcons name="link" size={24} color="gray" />
+              <Text style={profileStyles.hyperlinkText}>ManMachine</Text>
+            </TouchableOpacity>
+            <View style={profileStyles.linkItem}>
+              <EvilIcons name="calendar" size={24} color="gray" />
+              <Text style={profileStyles.linkText}>Joined April 2011</Text>
+            </View>
+          </View>
+          <View style={followerStyles.wrapper}>
+            <View style={followerStyles.container}>
+              <Text style={followerStyles.count}>989</Text>
+              <Text style={followerStyles.text}>Following</Text>
+            </View>
+            <View style={followerStyles.container}>
+              <Text style={followerStyles.count}>2,864</Text>
+              <Text style={followerStyles.text}>Followers</Text>
+            </View>
+          </View>
+          <View style={pageStyles.separator} />
+          <TweetList scrollEnabled={false} tweets={tweets} />
+        </ScrollView>
+      ) : (
+        ''
+      )}
     </View>
   )
 }

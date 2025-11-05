@@ -1,9 +1,12 @@
 import { styles } from '@/styles/styles'
-import { useLocalSearchParams, useRouter } from 'expo-router'
+import { useRouter } from 'expo-router'
 import { Image, StyleSheet, TouchableOpacity } from 'react-native'
 
-export default function ProfileAvatar() {
-  const params = useLocalSearchParams()
+type AvatarProps = {
+  user: User
+}
+
+export default function ProfileAvatar({ user }: AvatarProps) {
   const router = useRouter()
 
   const goToProfile = (id: string) => {
@@ -14,11 +17,8 @@ export default function ProfileAvatar() {
   }
 
   return (
-    <TouchableOpacity style={styles.utility.flexRow} onPress={() => goToProfile(String(params.id))}>
-      <Image
-        style={profileStyles.avatar}
-        source={{ uri: 'https://reactnative.dev/img/tiny_logo.png' }}
-      />
+    <TouchableOpacity style={styles.utility.flexRow} onPress={() => goToProfile(String(user.id))}>
+      <Image style={profileStyles.avatar} source={{ uri: user.avatar_url }} />
     </TouchableOpacity>
   )
 }

@@ -1,11 +1,14 @@
 import { styles } from '@/styles/styles'
 import EvilIcons from '@expo/vector-icons/EvilIcons'
+import { format, parseISO } from 'date-fns'
 import { useRouter } from 'expo-router'
 import { Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import ProfileAvatar from './ProfileAvatar'
 
 export default function TweetCard({ tweet }: TweetProps) {
   const router = useRouter()
+
+  const getHumanReadableDate = (date: string) => format(parseISO(date), 'MMMM d, yyyy h:mm a')
 
   const goToTweet = (id: string) => {
     router.navigate({
@@ -16,29 +19,24 @@ export default function TweetCard({ tweet }: TweetProps) {
 
   return (
     <View style={tweetCardStyles.container}>
-      <ProfileAvatar />
+      <ProfileAvatar user={tweet.user} />
       <View style={tweetCardStyles.wrapper}>
         <TouchableOpacity style={{ ...styles.utility.flexRow, ...tweetCardStyles.headerContainer }}>
           <Text numberOfLines={1} style={styles.text.username}>
-            {tweet.name}
+            {tweet.user.name}
           </Text>
           <Text numberOfLines={1} style={styles.text.handle}>
-            {tweet.handle}
+            @{tweet.user.handle}
           </Text>
           <Text numberOfLines={1} style={tweetCardStyles.dot}>
             &middot;
           </Text>
           <Text numberOfLines={1} style={tweetCardStyles.time}>
-            {tweet.time}
+            {getHumanReadableDate(tweet.time)}
           </Text>
         </TouchableOpacity>
         <TouchableOpacity style={tweetContentStyles.container} onPress={() => goToTweet(tweet.id)}>
-          <Text style={tweetContentStyles.text}>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quas adipisci dignissimos
-            laboriosam. Dolorem exercitationem et delectus voluptates, possimus beatae provident.
-            Doloremque excepturi ducimus perferendis quia, corrupti repudiandae consectetur illo
-            ratione.
-          </Text>
+          <Text style={tweetContentStyles.text}>{tweet.body}</Text>
         </TouchableOpacity>
         <View style={tweetEngagementStyles.container}>
           <TouchableOpacity style={tweetEngagementStyles.commentWrapper}>
