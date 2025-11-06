@@ -4,13 +4,17 @@ import { styles } from '@/styles/styles'
 import { api } from '@/utilities/api'
 import Entypo from '@expo/vector-icons/Entypo'
 import EvilIcons from '@expo/vector-icons/EvilIcons'
+import { format } from 'date-fns'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { useEffect, useState } from 'react'
-import { Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
 export default function ViewTweetScreen() {
   const params = useLocalSearchParams()
   const router = useRouter()
+
+  const [tweet, setTweet] = useState(null as Tweet | null)
+  const [isLoading, setIsLoading] = useState(true as boolean)
 
   const goToProfile = (id: string) => {
     router.navigate({
@@ -19,16 +23,27 @@ export default function ViewTweetScreen() {
     })
   }
 
-  const [tweet, setTweet] = useState(null as Tweet | null)
-
   useEffect(() => {
-    api(`${API_ROOT_URL}/tweets/${params.view}`).then(res => {
-      setTweet(res.data)
-    })
+    setIsLoading(true)
+    api(`${API_ROOT_URL}/tweets/${params.view}`)
+      .then(res => {
+        setTweet({
+          ...res.data,
+          time: res.data.created_at,
+        })
+      })
+      .finally(() => setIsLoading(false))
   }, [params.view])
 
   return (
     <View style={pageStyles.container}>
+      {isLoading ? (
+        <View style={{ padding: 40 }}>
+          <ActivityIndicator size="large" />
+        </View>
+      ) : (
+        ''
+      )}
       {tweet ? (
         <View>
           <View style={profileStyles.container}>
@@ -50,6 +65,15 @@ export default function ViewTweetScreen() {
           </View>
           <View style={tweetStyles.container}>
             <Text style={tweetStyles.text}>{tweet.body}</Text>
+            <View style={timestampStyles.container}>
+              <Text style={timestampStyles.text}>{format(tweet.time, 'h:mm a')}</Text>
+              <Text style={timestampStyles.text}>&middot;</Text>
+              <Text style={timestampStyles.text}>{format(tweet.time, 'd MMM.yy')}</Text>
+              <Text style={timestampStyles.text}>&middot;</Text>
+              <Text style={timestampStyles.linkText}>
+                Twitter for {Platform.OS === 'ios' ? 'iPhone' : 'Android'}
+              </Text>
+            </View>
           </View>
           <View style={tweetStatsStyles.container}>
             <View style={tweetStatsStyles.innerContainer}>
@@ -217,5 +241,19 @@ const tweetStyles = StyleSheet.create({
     paddingBottom: 12,
     borderBottomWidth: 1,
     borderBottomColor: '#e5e7eb',
+  },
+})
+
+const timestampStyles = StyleSheet.create({
+  text: {
+    color: '#222',
+  },
+  container: {
+    gap: 4,
+    flexDirection: 'row',
+    paddingTop: 8,
+  },
+  linkText: {
+    color: '#1d9bf1',
   },
 })
