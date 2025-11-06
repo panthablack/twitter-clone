@@ -10,4 +10,6 @@ type TweetProps = { tweet: Tweet }
 type TweetListProps = {
   tweets: Tweet[]
   scrollEnabled?: boolean
+  refreshing?: boolean
+  onRefresh?: function
 }

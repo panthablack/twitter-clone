@@ -4,16 +4,18 @@ import { api } from '@/utilities/api'
 import AntDesign from '@expo/vector-icons/AntDesign'
 import { useRouter } from 'expo-router'
 import { useEffect, useState } from 'react'
-import { StyleSheet, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 export default function Home() {
   const insets = useSafeAreaInsets()
   const router = useRouter()
   const [tweets, setTweets] = useState([] as Tweet[])
+  const [isLoading, setIsLoading] = useState(true as boolean)
+  const [refreshing, setRefreshing] = useState(false as boolean)
 
-  useEffect(() => {
-    api(`${API_ROOT_URL}/tweets`).then(res => {
+  const fetchAllTweets = async () =>
+    await api(`${API_ROOT_URL}/tweets`).then(res => {
       const mapped: Tweet[] = (res?.data || []).map((i: Record<string, any>) => ({
         id: i.id,
         body: i.body,
@@ -27,6 +29,19 @@ export default function Home() {
       }))
       setTweets(() => mapped)
     })
+
+  const onRefresh = () => {
+    setRefreshing(true)
+    fetchAllTweets().finally(() => {
+      setRefreshing(false)
+    })
+  }
+
+  useEffect(() => {
+    setIsLoading(true)
+    fetchAllTweets().finally(() => {
+      setIsLoading(false)
+    })
   }, [])
 
   const goToCreateTweet = () => {
@@ -37,7 +52,11 @@ export default function Home() {
 
   return (
     <View style={pageStyles.container}>
-      <TweetList tweets={tweets} />
+      {!isLoading ? (
+        <TweetList tweets={tweets} onRefresh={onRefresh} refreshing={refreshing} />
+      ) : (
+        <ActivityIndicator size="large" />
+      )}
       <TouchableOpacity
         style={[pageStyles.floatingButton, { bottom: insets.bottom + 20 }]}
         onPress={() => goToCreateTweet()}

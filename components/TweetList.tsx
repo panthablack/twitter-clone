@@ -1,7 +1,12 @@
 import TweetCard from '@/components/TweetCard'
 import { FlatList, StyleSheet, View } from 'react-native'
 
-export default function TweetList({ scrollEnabled = true, tweets = [] }: TweetListProps) {
+export default function TweetList({
+  scrollEnabled = true,
+  tweets = [],
+  refreshing = false,
+  onRefresh = () => ({}),
+}: TweetListProps) {
   return (
     <View style={pageStyles.container}>
       <FlatList
@@ -10,6 +15,8 @@ export default function TweetList({ scrollEnabled = true, tweets = [] }: TweetLi
         renderItem={({ item: tweet }) => <TweetCard tweet={tweet} />}
         keyExtractor={(tweet: Tweet) => tweet.id}
         ItemSeparatorComponent={() => <View style={pageStyles.tweetSeparator}></View>}
+        refreshing={refreshing}
+        onRefresh={onRefresh}
       />
     </View>
   )
