@@ -1,11 +1,14 @@
 import TweetCard from '@/components/TweetCard'
-import { FlatList, StyleSheet, View } from 'react-native'
+import { ActivityIndicator, FlatList, StyleSheet, View } from 'react-native'
 
 export default function TweetList({
   scrollEnabled = true,
   tweets = [],
   refreshing = false,
+  showFooter = false,
   onRefresh = () => ({}),
+  onEndReached = () => ({}),
+  onEndReachedThreshold = 0,
 }: TweetListProps) {
   return (
     <View style={pageStyles.container}>
@@ -17,6 +20,17 @@ export default function TweetList({
         ItemSeparatorComponent={() => <View style={pageStyles.tweetSeparator}></View>}
         refreshing={refreshing}
         onRefresh={onRefresh}
+        onEndReached={onEndReached}
+        onEndReachedThreshold={onEndReachedThreshold}
+        ListFooterComponent={() =>
+          showFooter ? (
+            <View style={{ paddingVertical: 20, marginBottom: 40 }}>
+              <ActivityIndicator size="large" />
+            </View>
+          ) : (
+            ''
+          )
+        }
       />
     </View>
   )

@@ -21,10 +21,12 @@ export default function ProfileScreen() {
   const [tweets, setTweets] = useState([] as Tweet[])
   const [isLoading, setIsLoading] = useState(true as boolean)
   const [refreshing, setRefreshing] = useState(false as boolean)
+  const [page, setPage] = useState(1 as number)
+  const [paginationLimitReached, setPaginationLimitReached] = useState(false as boolean)
 
   const fetchUser = useCallback(
     async () =>
-      await api(`${API_ROOT_URL}/users/${params.id}`).then(res => {
+      await api(`${API_ROOT_URL}/users/${params.id}?page=1`).then(res => {
         setTweets([])
 
         const serverUser = res?.data || null
@@ -43,26 +45,37 @@ export default function ProfileScreen() {
     [params.id]
   )
 
-  const fetchUserTweets = async (id: string) =>
-    await api(`${API_ROOT_URL}/users/${id}/tweets`).then(res => {
-      const mapped: Tweet[] = (res?.data || []).map((i: Record<string, any>) => ({
-        id: i.id,
-        body: i.body,
-        user: {
-          id: i.user.id,
-          name: i.user.name,
-          handle: i.user.handle,
-          avatar_url: i.user.avatar_url,
-        },
-        time: i.created_at,
-      }))
-      setTweets(() => mapped)
-    })
+  const fetchUserTweets = useCallback(
+    async () =>
+      await api(`${API_ROOT_URL}/users/${user?.id}/tweets?page=${page}`).then(res => {
+        if (!res?.data?.next_page_url) setPaginationLimitReached(true)
+        const mapped: Tweet[] = (res?.data?.data || []).map((i: Record<string, any>) => ({
+          id: i.id,
+          body: i.body,
+          user: {
+            id: i.user.id,
+            name: i.user.name,
+            handle: i.user.handle,
+            avatar_url: i.user.avatar_url,
+          },
+          time: i.created_at,
+        }))
+        setTweets(current => [...current, ...mapped])
+      }),
+    [page, user]
+  )
 
   const onRefresh = () => {
     if (!user?.id) return
     setRefreshing(true)
-    fetchUserTweets(String(user.id)).finally(() => setRefreshing(false))
+    setTweets([])
+    setPage(1)
+  }
+
+  const onEndReached = () => {
+    debugger
+    if (tweets?.length <= 9 || paginationLimitReached) return
+    setPage(page + 1)
   }
 
   useEffect(() => {
@@ -72,8 +85,8 @@ export default function ProfileScreen() {
 
   useEffect(() => {
     if (!user?.id) return
-    else fetchUserTweets(String(user.id))
-  }, [user])
+    else fetchUserTweets()
+  }, [page, user, fetchUserTweets])
 
   return (
     <View style={pageStyles.container}>
@@ -134,6 +147,8 @@ export default function ProfileScreen() {
                 tweets={tweets}
                 refreshing={refreshing}
                 onRefresh={onRefresh}
+                onEndReached={onEndReached}
+                showFooter={!paginationLimitReached}
               />
             )}
           </View>

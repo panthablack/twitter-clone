@@ -11,5 +11,8 @@ type TweetListProps = {
   tweets: Tweet[]
   scrollEnabled?: boolean
   refreshing?: boolean
+  showFooter?: boolean
+  onEndReached?: function
   onRefresh?: function
+  onEndReachedThreshold?: number
 }
