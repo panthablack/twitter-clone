@@ -1,14 +1,12 @@
 import { styles } from '@/styles/styles'
+import { getHumanReadableTimeToNow } from '@/utilities/dates'
 import EvilIcons from '@expo/vector-icons/EvilIcons'
-import { format, parseISO } from 'date-fns'
 import { useRouter } from 'expo-router'
 import { Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import ProfileAvatar from './ProfileAvatar'
 
 export default function TweetCard({ tweet }: TweetProps) {
   const router = useRouter()
-
-  const getHumanReadableDate = (date: string) => format(parseISO(date), 'MMMM d, yyyy h:mm a')
 
   const goToTweet = (id: string) => {
     router.navigate({
@@ -32,7 +30,7 @@ export default function TweetCard({ tweet }: TweetProps) {
             &middot;
           </Text>
           <Text numberOfLines={1} style={tweetCardStyles.time}>
-            {getHumanReadableDate(tweet.time)}
+            {getHumanReadableTimeToNow(tweet.time)}
           </Text>
         </TouchableOpacity>
         <TouchableOpacity style={tweetContentStyles.container} onPress={() => goToTweet(tweet.id)}>
