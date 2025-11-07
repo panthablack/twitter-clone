@@ -29,7 +29,11 @@ export default function CreateTweetScreen() {
   const sendTweet = (body: string) => {
     setIsLoading(true)
     api('/tweets', { method: 'POST', data: { body: body } })
-      .then(res => goToTweet(res?.data?.id))
+      .then(res => {
+        setNewTweet('')
+        goToTweet(res?.data?.id)
+      })
+      .catch(e => console.error(e))
       .finally(() => setIsLoading(false))
   }
 
@@ -52,16 +56,17 @@ export default function CreateTweetScreen() {
           <Text style={pageStyles.charsRemainingtext}>
             Characters remaining: {280 - newTweet.length}
           </Text>
-          <TouchableOpacity
-            style={createButtonStyles.container}
-            onPress={() => sendTweet(newTweet)}
-          >
-            {isLoading ? (
-              <ActivityIndicator size="small" />
-            ) : (
+          {isLoading ? (
+            <ActivityIndicator size="small" />
+          ) : (
+            <TouchableOpacity
+              style={createButtonStyles.container}
+              onPress={() => sendTweet(newTweet)}
+              disabled={isLoading || newTweet.length <= 0}
+            >
               <Text style={createButtonStyles.text}>Tweet</Text>
-            )}
-          </TouchableOpacity>
+            </TouchableOpacity>
+          )}
         </View>
       </View>
     </View>
