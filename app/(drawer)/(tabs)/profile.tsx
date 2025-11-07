@@ -1,5 +1,6 @@
 import TweetList from '@/components/TweetList'
 import { api } from '@/utilities/api'
+import { getHumanReadableTimeToNow } from '@/utilities/dates'
 import EvilIcons from '@expo/vector-icons/EvilIcons'
 import { useLocalSearchParams } from 'expo-router'
 import { useCallback, useEffect, useState } from 'react'
@@ -16,6 +17,7 @@ import {
 
 export default function ProfileScreen() {
   const params = useLocalSearchParams()
+
   const [user, setUser] = useState(null as User | null)
   const [tweets, setTweets] = useState([] as Tweet[])
   const [isLoading, setIsLoading] = useState(true as boolean)
@@ -25,21 +27,13 @@ export default function ProfileScreen() {
 
   const fetchUser = useCallback(
     async () =>
-      await api(`/users/${params.id}?page=1`).then(res => {
+      await api(`/users/${params.id}`).then(res => {
+        console.log('res?.data', res?.data)
         setTweets([])
 
-        const serverUser = res?.data || null
+        const serverUser = (res?.data as User) || null
 
-        const profileUser: User | null = serverUser?.id
-          ? {
-              id: serverUser.id,
-              name: serverUser.name,
-              handle: serverUser.handle,
-              avatar_url: serverUser.avatar_url,
-            }
-          : null
-
-        setUser(profileUser)
+        setUser(serverUser)
       }),
     [params.id]
   )
@@ -72,7 +66,6 @@ export default function ProfileScreen() {
   }
 
   const onEndReached = () => {
-    debugger
     if (tweets?.length <= 9 || paginationLimitReached) return
     setPage(page + 1)
   }
@@ -90,9 +83,16 @@ export default function ProfileScreen() {
   return (
     <View style={pageStyles.container}>
       <ScrollView>
-        {user ? (
+        {user && !isLoading ? (
           <View>
-            <Image style={pageStyles.bgImage} source={require('@/assets/photos/hill-photo.jpg')} />
+            {user.profile_banner_url ? (
+              <Image style={pageStyles.bgImage} source={{ uri: user.profile_banner_url }} />
+            ) : (
+              <Image
+                style={pageStyles.bgImage}
+                source={require('@/assets/photos/hill-photo.jpg')}
+              />
+            )}
             <View style={profileStyles.avatarContainer}>
               <Image style={profileStyles.avatar} source={{ uri: user.avatar_url }} />
               <TouchableOpacity style={profileStyles.followButton}>
@@ -104,27 +104,25 @@ export default function ProfileScreen() {
               <Text style={profileStyles.handle}>@{user.handle}</Text>
             </View>
             <View style={profileStyles.descriptionContainer}>
-              <Text style={profileStyles.description}>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsam nemo aperiam fugiat
-                magni delectus nesciunt soluta. Reprehenderit repellat dolore nemo velit illo iusto,
-                perspiciatis, facere porro quisquam, suscipit laborum. Cupiditate!
-              </Text>
+              <Text style={profileStyles.description}>{user.bio}</Text>
             </View>
             <View style={profileStyles.locationContainer}>
               <EvilIcons name="location" size={24} color="gray" />
-              <Text style={profileStyles.locationText}>Melbourne, Australia</Text>
+              <Text style={profileStyles.locationText}>{user.location}</Text>
             </View>
             <View style={profileStyles.linkContainer}>
               <TouchableOpacity
                 style={profileStyles.linkItem}
-                onPress={() => Linking.openURL('https://manmachineltd.com')}
+                onPress={() => Linking.openURL(user.link_url || '')}
               >
                 <EvilIcons name="link" size={24} color="gray" />
-                <Text style={profileStyles.hyperlinkText}>ManMachine</Text>
+                <Text style={profileStyles.hyperlinkText}>{user.link_text}</Text>
               </TouchableOpacity>
               <View style={profileStyles.linkItem}>
                 <EvilIcons name="calendar" size={24} color="gray" />
-                <Text style={profileStyles.linkText}>Joined April 2011</Text>
+                <Text style={profileStyles.linkText}>
+                  Joined {getHumanReadableTimeToNow(user.created_at)} ago
+                </Text>
               </View>
             </View>
             <View style={followerStyles.wrapper}>
@@ -152,7 +150,9 @@ export default function ProfileScreen() {
             )}
           </View>
         ) : (
-          ''
+          <View style={{ padding: 40 }}>
+            <ActivityIndicator size="large" />
+          </View>
         )}
       </ScrollView>
     </View>
@@ -247,6 +247,7 @@ const profileStyles = StyleSheet.create({
     flexDirection: 'row',
     paddingHorizontal: 12,
     marginTop: 4,
+    gap: 8,
   },
   linkItem: {
     flexDirection: 'row',
