@@ -1,5 +1,4 @@
 import ProfileAvatar from '@/components/ProfileAvatar'
-import { API_ROOT_URL } from '@/constants/networking'
 import { styles } from '@/styles/styles'
 import { api } from '@/utilities/api'
 import Entypo from '@expo/vector-icons/Entypo'
@@ -25,7 +24,7 @@ export default function ViewTweetScreen() {
 
   useEffect(() => {
     setIsLoading(true)
-    api(`${API_ROOT_URL}/tweets/${params.view}`)
+    api(`/tweets/${params.view}`)
       .then(res => {
         setTweet({
           ...res.data,

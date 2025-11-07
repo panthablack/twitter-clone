@@ -1,3 +1,4 @@
+import { API_ROOT_URL } from '@/constants/networking'
 import axios, { AxiosRequestConfig } from 'axios'
 
 const DEFAULT_HEADERS = {
@@ -8,6 +9,7 @@ const DEFAULT_HEADERS = {
 export const api = (url: string, config: AxiosRequestConfig = {}) => {
   const mapped = {
     url,
+    baseURL: API_ROOT_URL,
     ...config,
     headers: {
       ...DEFAULT_HEADERS,

@@ -1,5 +1,4 @@
 import TweetList from '@/components/TweetList'
-import { API_ROOT_URL } from '@/constants/networking'
 import { api } from '@/utilities/api'
 import AntDesign from '@expo/vector-icons/AntDesign'
 import { useRouter } from 'expo-router'
@@ -18,7 +17,7 @@ export default function Home() {
 
   const fetchAllTweets = useCallback(
     async () =>
-      await api(`${API_ROOT_URL}/tweets?page=${page}`)
+      await api(`/tweets?page=${page}`)
         .then(res => {
           if (res?.data?.next_page_url === null) setPaginationLimitReached(true)
           const mapped: Tweet[] = (res?.data?.data || []).map((i: Record<string, any>) => ({

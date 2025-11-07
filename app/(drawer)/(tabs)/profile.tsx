@@ -1,5 +1,4 @@
 import TweetList from '@/components/TweetList'
-import { API_ROOT_URL } from '@/constants/networking'
 import { api } from '@/utilities/api'
 import EvilIcons from '@expo/vector-icons/EvilIcons'
 import { useLocalSearchParams } from 'expo-router'
@@ -26,7 +25,7 @@ export default function ProfileScreen() {
 
   const fetchUser = useCallback(
     async () =>
-      await api(`${API_ROOT_URL}/users/${params.id}?page=1`).then(res => {
+      await api(`/users/${params.id}?page=1`).then(res => {
         setTweets([])
 
         const serverUser = res?.data || null
@@ -47,7 +46,7 @@ export default function ProfileScreen() {
 
   const fetchUserTweets = useCallback(
     async () =>
-      await api(`${API_ROOT_URL}/users/${user?.id}/tweets?page=${page}`).then(res => {
+      await api(`/users/${user?.id}/tweets?page=${page}`).then(res => {
         if (!res?.data?.next_page_url) setPaginationLimitReached(true)
         const mapped: Tweet[] = (res?.data?.data || []).map((i: Record<string, any>) => ({
           id: i.id,

@@ -1,12 +1,37 @@
 import ProfileAvatar from '@/components/ProfileAvatar'
 import { FAKE_AUTH_USER } from '@/constants/fakeData'
+import { api } from '@/utilities/api'
+import { useRouter } from 'expo-router'
 import { useState } from 'react'
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import {
+  ActivityIndicator,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native'
 
 export default function CreateTweetScreen() {
-  const [newTweet, setNewTweet] = useState('')
+  const router = useRouter()
 
+  const [newTweet, setNewTweet] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
   const [authUser] = useState({ ...FAKE_AUTH_USER })
+
+  const goToTweet = (id: string) => {
+    router.navigate({
+      pathname: '/tweets/[view]',
+      params: { view: id },
+    })
+  }
+
+  const sendTweet = (body: string) => {
+    setIsLoading(true)
+    api('/tweets', { method: 'POST', data: { body: body } })
+      .then(res => goToTweet(res?.data?.id))
+      .finally(() => setIsLoading(false))
+  }
 
   return (
     <View style={pageStyles.container}>
@@ -27,8 +52,15 @@ export default function CreateTweetScreen() {
           <Text style={pageStyles.charsRemainingtext}>
             Characters remaining: {280 - newTweet.length}
           </Text>
-          <TouchableOpacity style={createButtonStyles.container} onPress={() => alert(newTweet)}>
-            <Text style={createButtonStyles.text}>Tweet</Text>
+          <TouchableOpacity
+            style={createButtonStyles.container}
+            onPress={() => sendTweet(newTweet)}
+          >
+            {isLoading ? (
+              <ActivityIndicator size="small" />
+            ) : (
+              <Text style={createButtonStyles.text}>Tweet</Text>
+            )}
           </TouchableOpacity>
         </View>
       </View>
