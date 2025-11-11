@@ -1,4 +1,4 @@
-import { deleteItemAsync, getItem, setItem } from 'expo-secure-store'
+import { getStorageAdapter } from '@/utilities/storage'
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 
@@ -15,13 +15,8 @@ export const useBootStore = create(
     }),
     {
       name: 'boot-store',
-      storage: createJSONStorage(() => ({
-        setItem,
-        getItem,
-        removeItem: deleteItemAsync,
-      })),
+      skipHydration: true,
+      storage: createJSONStorage(() => getStorageAdapter()),
     }
   )
 )
-
-//

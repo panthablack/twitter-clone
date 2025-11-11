@@ -10,7 +10,7 @@ export default function RootLayout() {
   const bootStore = useBootStore()
 
   useEffect(() => {
-    authStore.logOut()
+    // authStore.logOut()
     bootStore.setIsLoading(false)
   }, [])
 

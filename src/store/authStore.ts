@@ -1,5 +1,5 @@
 import { FAKE_AUTH_USER } from '@/constants/fakeData'
-import { deleteItemAsync, getItem, setItem } from 'expo-secure-store'
+import { getStorageAdapter } from '@/utilities/storage'
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 
@@ -34,11 +34,8 @@ export const useAuthStore = create(
     }),
     {
       name: 'auth-store',
-      storage: createJSONStorage(() => ({
-        setItem,
-        getItem,
-        removeItem: deleteItemAsync,
-      })),
+      skipHydration: true,
+      storage: createJSONStorage(() => getStorageAdapter()),
     }
   )
 )
