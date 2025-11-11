@@ -34,7 +34,7 @@ export const useAuthStore = create(
     }),
     {
       name: 'auth-store',
-      skipHydration: true,
+      skipHydration: typeof window === 'undefined',
       storage: createJSONStorage(() => getStorageAdapter()),
     }
   )

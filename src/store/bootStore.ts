@@ -15,7 +15,7 @@ export const useBootStore = create(
     }),
     {
       name: 'boot-store',
-      skipHydration: true,
+      skipHydration: typeof window === 'undefined',
       storage: createJSONStorage(() => getStorageAdapter()),
     }
   )
