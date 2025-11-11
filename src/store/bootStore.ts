@@ -14,7 +14,7 @@ export const useBootStore = create(
       setIsLoading: (value: boolean) => set((state: BootState) => ({ ...state, isLoading: value })),
     }),
     {
-      name: 'auth-store',
+      name: 'boot-store',
       storage: createJSONStorage(() => ({
         setItem,
         getItem,
