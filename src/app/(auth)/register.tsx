@@ -1,21 +1,20 @@
 import { AppText } from '@//components/AppText'
-import { Button } from '@//components/Button'
 import OpenModalButton from '@//components/OpenModalButton'
 import { useAuthStore } from '@//store/authStore'
+import { Button } from '@/components/Button'
 import React from 'react'
 import { View } from 'react-native'
 
-export default function LoginScreen() {
+export default function RegisterScreen() {
   const authStore = useAuthStore()
 
   return (
     <View className="justify-center flex-1 p-4">
       <AppText center size="heading">
-        Login Screen
+        Register Screen
       </AppText>
-      <Button title="Log In" onPress={() => authStore.logIn('person@people.com', 'secret')} />
+      <Button title="Register" onPress={() => authStore.register('person@people.com', 'secret')} />
       <OpenModalButton />
-      <Button title="Reset Onboarding" onPress={() => authStore.resetOnboarding()} />
     </View>
   )
 }

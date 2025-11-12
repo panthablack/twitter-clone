@@ -24,11 +24,9 @@ export default function RootLayout() {
           <Stack.Protected guard={authStore.hasCompletedOnboarding}>
             <Stack.Protected guard={!!authStore.authUser}>
               <Stack.Screen name="(drawer)" options={{ headerShown: false }} />
-              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
             </Stack.Protected>
             <Stack.Protected guard={!authStore.authUser}>
-              <Stack.Screen name="login" />
-              <Stack.Screen name="create-account" />
+              <Stack.Screen name="(auth)" options={{ headerShown: false }} />
             </Stack.Protected>
             <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
           </Stack.Protected>

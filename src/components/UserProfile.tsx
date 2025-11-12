@@ -2,7 +2,6 @@ import TweetList from '@//components/TweetList'
 import { api } from '@//utilities/api'
 import { getHumanReadableTimeToNow } from '@//utilities/dates'
 import EvilIcons from '@expo/vector-icons/EvilIcons'
-import { useLocalSearchParams } from 'expo-router'
 import { useCallback, useEffect, useState } from 'react'
 import {
   ActivityIndicator,
@@ -15,9 +14,7 @@ import {
   View,
 } from 'react-native'
 
-export default function ProfileScreen() {
-  const params = useLocalSearchParams()
-
+export default function UserProfile({ userId }: { userId: string }) {
   const [user, setUser] = useState(null as User | null)
   const [tweets, setTweets] = useState([] as Tweet[])
   const [isLoading, setIsLoading] = useState(true as boolean)
@@ -27,7 +24,7 @@ export default function ProfileScreen() {
 
   const fetchUser = useCallback(
     async () =>
-      await api(`/users/${params.id}`).then(res => {
+      await api(`/users/${userId}`).then(res => {
         console.log('res?.data', res?.data)
         setTweets([])
 
@@ -35,12 +32,12 @@ export default function ProfileScreen() {
 
         setUser(serverUser)
       }),
-    [params.id]
+    [userId]
   )
 
   const fetchUserTweets = useCallback(
     async () =>
-      await api(`/users/${user?.id}/tweets?page=${page}`).then(res => {
+      await api(`/users/${userId}/tweets?page=${page}`).then(res => {
         if (!res?.data?.next_page_url) setPaginationLimitReached(true)
         const mapped: Tweet[] = (res?.data?.data || []).map((i: Record<string, any>) => ({
           id: i.id,
@@ -55,11 +52,11 @@ export default function ProfileScreen() {
         }))
         setTweets(current => [...current, ...mapped])
       }),
-    [page, user]
+    [page, userId]
   )
 
   const onRefresh = () => {
-    if (!user?.id) return
+    if (!userId) return
     setRefreshing(true)
     setTweets([])
     setPage(1)
@@ -73,10 +70,10 @@ export default function ProfileScreen() {
   useEffect(() => {
     setIsLoading(true)
     fetchUser().finally(() => setIsLoading(false))
-  }, [params.id, fetchUser])
+  }, [userId, fetchUser])
 
   useEffect(() => {
-    if (!user?.id) return
+    if (!userId) return
     else fetchUserTweets()
   }, [page, user, fetchUserTweets])
 

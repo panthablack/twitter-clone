@@ -17,8 +17,8 @@ export default function ViewTweetScreen() {
 
   const goToProfile = (id: string) => {
     router.navigate({
-      pathname: '/profile',
-      params: { id },
+      pathname: '/profile/[user]',
+      params: { user: id },
     })
   }
 

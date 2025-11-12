@@ -7,6 +7,7 @@ type AuthState = {
   authUser: User | null
   logIn: (email: string, password: string) => void
   logOut: () => void
+  register: (email: string, password: string) => void
   hasCompletedOnboarding: boolean
   completeOnboarding: () => void
   resetOnboarding: () => void
@@ -19,6 +20,7 @@ export const useAuthStore = create(
       hasCompletedOnboarding: false,
       logIn: () => set((state: AuthState) => ({ ...state, authUser: FAKE_AUTH_USER })),
       logOut: () => set((state: AuthState) => ({ ...state, authUser: null })),
+      register: () => set((state: AuthState) => ({ ...state, authUser: null })),
       // logIn: async (email: string, password: string) =>
       //   await api('/auth/user', { method: 'POST', data: { email, password } }).then(res => {
       //     set((state: AuthState) => ({ ...state, authUser: res?.data }))

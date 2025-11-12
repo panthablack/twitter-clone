@@ -10,6 +10,10 @@ export default function DrawerLayout() {
         }}
       />
       <Drawer.Screen
+        name="profile/[user]"
+        options={{ drawerItemStyle: { display: 'none' }, title: 'Profile' }}
+      />
+      <Drawer.Screen
         name="tweets/create"
         options={{
           title: 'Create Tweet',
@@ -20,7 +24,6 @@ export default function DrawerLayout() {
         options={{
           title: 'Settings',
           headerShown: false,
-          // drawerItemStyle: { display: 'none' },
         }}
       />
       <Drawer.Screen
