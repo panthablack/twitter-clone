@@ -46,3 +46,5 @@ app-example
 .vscode
 
 .env
+*CLAUDE*
+*claude*

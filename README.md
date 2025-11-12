@@ -1,50 +1,159 @@
-# Welcome to your Expo app 👋
+# Twitter Clone
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A cross-platform social media application built with React Native and Expo that runs on iOS, Android, and Web. This project demonstrates a full-featured Twitter-like social network with authentication, tweet management, user profiles, and real-time data synchronization.
 
-## Get started
+**Current Status:** Active Development | **Branch:** `dev`
 
-1. Install dependencies
+---
 
+## Features
+
+- **Tweet Feed** - Paginated infinite scroll with pull-to-refresh
+- **Create Tweets** - Post new tweets with 280 character limit
+- **User Profiles** - View user information and their tweets
+- **Authentication** - Login/Register with persistent sessions
+- **Onboarding Flow** - Welcome and setup screens
+- **Cross-Platform** - Runs natively on iOS, Android, and Web
+- **Responsive Design** - Adapts to different screen sizes
+
+---
+
+## Tech Stack
+
+| Category | Technology |
+|----------|-----------|
+| **Framework** | Expo 54.0.23, React Native 0.81.5, React 19.1.0 |
+| **Navigation** | Expo Router (file-based), React Navigation 7.x |
+| **Styling** | NativeWind + Tailwind CSS 3.4.17 |
+| **State Management** | Zustand 5.0.8 |
+| **API Client** | Axios 1.13.2 |
+| **Language** | TypeScript 5.9.2 |
+| **Storage** | expo-secure-store (native), localStorage (web) |
+
+---
+
+## Quick Start
+
+### Prerequisites
+- Node.js 18+
+- Yarn or npm
+- Expo CLI (optional)
+
+### Installation
+
+1. **Install dependencies**
    ```bash
-   yarn
+   yarn install
    ```
 
-2. Start the app
+2. **Configure environment variables**
+   ```bash
+   cp .env.example .env
+   ```
+   Update `.env` with your API configuration
 
+3. **Start the app**
    ```bash
    yarn dev
    ```
 
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+### Available Commands
 
 ```bash
-npm run reset-project
+yarn start          # Start Expo development server
+yarn dev            # Start with tunnel (remote development)
+yarn android        # Run on Android emulator
+yarn ios            # Run on iOS simulator
+yarn web            # Run in web browser
+yarn lint           # Run ESLint
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+---
 
-## Learn more
+## Project Structure
 
-To learn more about developing your project with Expo, look at the following resources:
+```
+src/
+├── app/              # Expo Router screens (file-based routing)
+├── components/       # Reusable UI components
+├── store/           # Zustand state management
+├── types/           # TypeScript type definitions
+├── utilities/       # Helper functions & API client
+├── constants/       # App constants
+├── styles/          # Global styles & configuration
+└── assets/          # Images and static files
+```
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+For detailed documentation about the codebase, see [CLAUDE.md](./CLAUDE.md).
 
-## Join the community
+---
 
-Join our community of developers creating universal apps.
+## API Integration
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+The app connects to a Twitter API backend. Configuration is managed through environment variables:
+
+```env
+EXPO_PUBLIC_API_ROOT_URL=https://api.example.com/api
+```
+
+### Available Endpoints
+- `GET /tweets?page={page}` - Fetch paginated tweets
+- `POST /tweets` - Create a new tweet
+- `GET /auth/user` - Get current user
+- `POST /auth/logout` - Logout
+
+For API documentation, see [CLAUDE.md](./CLAUDE.md#api-integration).
+
+---
+
+## Development
+
+### File-Based Routing
+
+This project uses [Expo Router](https://docs.expo.dev/router/introduction/) for file-based routing, similar to Next.js. Routes are automatically generated from the file structure in `src/app/`.
+
+### State Management
+
+Global state is managed with [Zustand](https://github.com/pmndrs/zustand) in `src/store/`. The store includes:
+- `authStore` - User authentication and session state
+- `bootStore` - App initialization state
+
+### Styling
+
+Uses [NativeWind](https://www.nativewind.dev/) for Tailwind CSS integration with React Native. Global styles are in `src/styles/global.css`.
+
+### Type Safety
+
+The project uses strict TypeScript. Type definitions are located in `src/types/` and enforced throughout the codebase.
+
+---
+
+## Known Issues
+
+- Authentication currently uses mock data. Real API integration is commented out and ready to be activated.
+- Settings and Support screens are placeholder implementations.
+- Button component has a rendering issue on line 35 of `src/components/Button.tsx`.
+
+See [CLAUDE.md](./CLAUDE.md#known-issues--technical-debt) for more details.
+
+---
+
+## Resources
+
+- [Expo Documentation](https://docs.expo.dev/)
+- [React Native Documentation](https://reactnative.dev/)
+- [Expo Router Guide](https://docs.expo.dev/router/introduction/)
+- [Zustand Documentation](https://github.com/pmndrs/zustand)
+- [NativeWind Documentation](https://www.nativewind.dev/)
+- [TypeScript Handbook](https://www.typescriptlang.org/docs/)
+
+---
+
+## For More Information
+
+See [CLAUDE.md](./CLAUDE.md) for comprehensive project documentation including:
+- Detailed tech stack information
+- Complete project structure
+- API data models
+- Development notes and architecture patterns
+- Known issues and technical debt
