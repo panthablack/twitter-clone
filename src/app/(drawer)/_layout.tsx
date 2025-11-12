@@ -27,6 +27,13 @@ export default function DrawerLayout() {
         }}
       />
       <Drawer.Screen
+        name="logout"
+        options={{
+          title: 'Log Out',
+          headerShown: false,
+        }}
+      />
+      <Drawer.Screen
         name="tweets/[view]"
         options={{
           drawerItemStyle: { display: 'none' },
