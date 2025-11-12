@@ -25,7 +25,6 @@ export default function UserProfile({ userId }: { userId: string }) {
   const fetchUser = useCallback(
     async () =>
       await api(`/users/${userId}`).then(res => {
-        console.log('res?.data', res?.data)
         setTweets([])
 
         const serverUser = (res?.data as User) || null

@@ -16,6 +16,5 @@ export const api = (url: string, config: AxiosRequestConfig = {}) => {
       ...config.headers,
     },
   }
-  console.log('mapped', mapped)
   return axios.request(mapped)
 }
