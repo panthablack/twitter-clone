@@ -50,7 +50,11 @@ export default function UserProfile({ userId }: { userId: string }) {
           },
           time: i.created_at,
         }))
-        setTweets(current => [...current, ...mapped])
+        setTweets(current => {
+          const existingIds = new Set(current.map(tweet => tweet.id))
+          const newTweets = mapped.filter(tweet => !existingIds.has(tweet.id))
+          return [...current, ...newTweets]
+        })
       }),
     [page, userId]
   )

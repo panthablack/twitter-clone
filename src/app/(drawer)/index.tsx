@@ -31,7 +31,11 @@ export default function HomeScreen() {
             },
             time: i.created_at,
           }))
-          setTweets(current => [...current, ...mapped])
+          setTweets(current => {
+            const existingIds = new Set(current.map(tweet => tweet.id))
+            const newTweets = mapped.filter(tweet => !existingIds.has(tweet.id))
+            return [...current, ...newTweets]
+          })
         })
         .finally(() => {
           setRefreshing(false)
