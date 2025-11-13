@@ -1,16 +1,24 @@
 import { cn } from '@//utilities/cn'
 import React from 'react'
-import { Pressable, PressableProps, Text } from 'react-native'
+import { ActivityIndicator, Pressable, PressableProps, Text } from 'react-native'
 
 type ButtonProps = {
   title: string
   onPress?: () => void
   theme?: 'primary' | 'secondary' | 'tertiary'
   disabled?: boolean
+  isLoading?: boolean
 } & PressableProps
 
 // from SDK 53 (React 19) onwards, forwardRef is no longer needed, as ref is now a prop
-export function Button({ title, onPress, theme = 'primary', disabled, ...rest }: ButtonProps) {
+export function Button({
+  isLoading,
+  title,
+  onPress,
+  theme = 'primary',
+  disabled,
+  ...rest
+}: ButtonProps) {
   return (
     <Pressable
       onPress={onPress}
@@ -21,19 +29,23 @@ export function Button({ title, onPress, theme = 'primary', disabled, ...rest }:
         theme === 'tertiary' && 'bg-transparent border-transparent',
         disabled && 'opacity-50'
       )}
-      disabled={disabled}
+      disabled={disabled || isLoading}
       {...rest}
     >
-      <Text
-        className={cn(
-          'font-semibold text-lg tracking-wider',
-          theme === 'secondary' && 'text-black',
-          theme === 'primary' && 'text-white',
-          theme === 'tertiary' && 'text-gray-800'
-        )}
-      >
-        {title} {disabled}
-      </Text>
+      {isLoading ? (
+        <ActivityIndicator size="small" color="white" />
+      ) : (
+        <Text
+          className={cn(
+            'font-semibold text-lg tracking-wider',
+            theme === 'secondary' && 'text-black',
+            theme === 'primary' && 'text-white',
+            theme === 'tertiary' && 'text-gray-800'
+          )}
+        >
+          {title} {disabled}
+        </Text>
+      )}
     </Pressable>
   )
 }

@@ -33,7 +33,12 @@ export default function LoginScreen() {
         autoCapitalize="none"
         secureTextEntry={true}
       />
-      <Button title="Log In" onPress={() => authStore.logIn(email, password)} />
+
+      <Button
+        isLoading={authStore.isLoading}
+        title="Log In"
+        onPress={() => authStore.logIn(email, password)}
+      />
       <Button title="Reset Onboarding" onPress={() => authStore.resetOnboarding()} />
       <Link asChild push href="/register">
         <Button title="Register" />

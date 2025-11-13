@@ -7,9 +7,7 @@ export default function LoginScreen() {
   const authStore = useAuthStore()
 
   useEffect(() => {
-    setTimeout(() => {
-      authStore.logOut()
-    }, 2000)
+    authStore.logOut()
   }, [])
 
   return (
