@@ -20,21 +20,22 @@ A cross-platform social media application built with React Native and Expo that 
 
 ## Tech Stack
 
-| Category | Technology |
-|----------|-----------|
-| **Framework** | Expo 54.0.23, React Native 0.81.5, React 19.1.0 |
-| **Navigation** | Expo Router (file-based), React Navigation 7.x |
-| **Styling** | NativeWind + Tailwind CSS 3.4.17 |
-| **State Management** | Zustand 5.0.8 |
-| **API Client** | Axios 1.13.2 |
-| **Language** | TypeScript 5.9.2 |
-| **Storage** | expo-secure-store (native), localStorage (web) |
+| Category             | Technology                                      |
+| -------------------- | ----------------------------------------------- |
+| **Framework**        | Expo 54.0.23, React Native 0.81.5, React 19.1.0 |
+| **Navigation**       | Expo Router (file-based), React Navigation 7.x  |
+| **Styling**          | NativeWind + Tailwind CSS 3.4.17                |
+| **State Management** | Zustand 5.0.8                                   |
+| **API Client**       | Axios 1.13.2                                    |
+| **Language**         | TypeScript 5.9.2                                |
+| **Storage**          | expo-secure-store (native), localStorage (web)  |
 
 ---
 
 ## Quick Start
 
 ### Prerequisites
+
 - Node.js 18+
 - Yarn or npm
 - Expo CLI (optional)
@@ -42,14 +43,17 @@ A cross-platform social media application built with React Native and Expo that 
 ### Installation
 
 1. **Install dependencies**
+
    ```bash
    yarn install
    ```
 
 2. **Configure environment variables**
+
    ```bash
    cp .env.example .env
    ```
+
    Update `.env` with your API configuration
 
 3. **Start the app**
@@ -70,24 +74,6 @@ yarn lint           # Run ESLint
 
 ---
 
-## Project Structure
-
-```
-src/
-├── app/              # Expo Router screens (file-based routing)
-├── components/       # Reusable UI components
-├── store/           # Zustand state management
-├── types/           # TypeScript type definitions
-├── utilities/       # Helper functions & API client
-├── constants/       # App constants
-├── styles/          # Global styles & configuration
-└── assets/          # Images and static files
-```
-
-For detailed documentation about the codebase, see [CLAUDE.md](./CLAUDE.md).
-
----
-
 ## API Integration
 
 The app connects to a Twitter API backend. Configuration is managed through environment variables:
@@ -95,16 +81,6 @@ The app connects to a Twitter API backend. Configuration is managed through envi
 ```env
 EXPO_PUBLIC_API_ROOT_URL=https://api.example.com/api
 ```
-
-### Available Endpoints
-- `GET /tweets?page={page}` - Fetch paginated tweets
-- `POST /tweets` - Create a new tweet
-- `GET /auth/user` - Get current user
-- `POST /auth/logout` - Logout
-
-For API documentation, see [CLAUDE.md](./CLAUDE.md#api-integration).
-
----
 
 ## Development
 
@@ -115,6 +91,7 @@ This project uses [Expo Router](https://docs.expo.dev/router/introduction/) for 
 ### State Management
 
 Global state is managed with [Zustand](https://github.com/pmndrs/zustand) in `src/store/`. The store includes:
+
 - `authStore` - User authentication and session state
 - `bootStore` - App initialization state
 
@@ -128,16 +105,6 @@ The project uses strict TypeScript. Type definitions are located in `src/types/`
 
 ---
 
-## Known Issues
-
-- Authentication currently uses mock data. Real API integration is commented out and ready to be activated.
-- Settings and Support screens are placeholder implementations.
-- Button component has a rendering issue on line 35 of `src/components/Button.tsx`.
-
-See [CLAUDE.md](./CLAUDE.md#known-issues--technical-debt) for more details.
-
----
-
 ## Resources
 
 - [Expo Documentation](https://docs.expo.dev/)
@@ -148,12 +115,3 @@ See [CLAUDE.md](./CLAUDE.md#known-issues--technical-debt) for more details.
 - [TypeScript Handbook](https://www.typescriptlang.org/docs/)
 
 ---
-
-## For More Information
-
-See [CLAUDE.md](./CLAUDE.md) for comprehensive project documentation including:
-- Detailed tech stack information
-- Complete project structure
-- API data models
-- Development notes and architecture patterns
-- Known issues and technical debt
