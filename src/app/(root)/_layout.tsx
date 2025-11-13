@@ -1,5 +1,5 @@
 import { useAuthStore } from '@//store/authStore'
-import '@/styles/global.css'
+import '@/styles/index.css'
 import { Stack } from 'expo-router'
 import React from 'react'
 

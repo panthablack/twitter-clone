@@ -2,6 +2,7 @@ import { API_ROOT_URL } from '@//constants/networking'
 import { useErrorStore } from '@/store/errorStore'
 import { LaravelErrorResponse } from '@/types/api'
 import axios, { AxiosError, AxiosRequestConfig } from 'axios'
+import { useCallback } from 'react'
 
 export const DEFAULT_API_HEADERS = {
   'ngrok-skip-browser-warning': 'true',
@@ -10,36 +11,38 @@ export const DEFAULT_API_HEADERS = {
 } as const
 
 export const useApi = () => {
-  const errorStore = useErrorStore.getState()
-
-  const handleApiError = async (e: AxiosError) => {
+  const handleApiError = useCallback(async (e: AxiosError) => {
     console.log('API Error: ', e)
     throw new Error(e?.message)
-  }
+  }, [])
 
-  const handleValidationError = async (e: AxiosError) => {
+  const handleValidationError = useCallback(async (e: AxiosError) => {
     console.log('API Validation Error: ', e)
     const data = e?.response?.data as LaravelErrorResponse | undefined
     const errors = data?.errors
     if (!errors) throw new Error(data?.message || e?.message || 'Validation Error')
-    Object.keys(errors).forEach((key: string) => errorStore.setValidationErrors(key, errors[key]))
-  }
+    Object.keys(errors).forEach((key: string) =>
+      useErrorStore.getState().setValidationErrors(key, errors[key])
+    )
+  }, [])
 
-  const api = async (url: string, config: AxiosRequestConfig = {}) =>
-    await axios
-      .request({
-        url,
-        baseURL: API_ROOT_URL,
-        ...config,
-        headers: {
-          ...DEFAULT_API_HEADERS,
-          ...config.headers,
-        },
-      })
-      .catch((e: AxiosError) => {
-        if (e?.status === 422) handleValidationError(e)
-        else handleApiError(e)
-      })
-
+  const api = useCallback(
+    async (url: string, config: AxiosRequestConfig = {}) =>
+      await axios
+        .request({
+          url,
+          baseURL: API_ROOT_URL,
+          ...config,
+          headers: {
+            ...DEFAULT_API_HEADERS,
+            ...config.headers,
+          },
+        })
+        .catch((e: AxiosError) => {
+          if (e?.status === 422) handleValidationError(e)
+          else handleApiError(e)
+        }),
+    [handleApiError, handleValidationError]
+  )
   return { api }
 }

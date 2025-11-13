@@ -41,7 +41,7 @@ export default function HomeScreen() {
         .finally(() => {
           setRefreshing(false)
         }),
-    [page]
+    [page, api]
   )
 
   const onRefresh = async () => {

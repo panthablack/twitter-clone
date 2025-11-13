@@ -33,7 +33,7 @@ export default function ViewTweetScreen() {
         })
       })
       .finally(() => setIsLoading(false))
-  }, [params.view])
+  }, [params.view, api])
 
   return (
     <View style={pageStyles.container}>

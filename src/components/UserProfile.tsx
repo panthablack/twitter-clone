@@ -32,7 +32,7 @@ export default function UserProfile({ userId }: { userId: string }) {
 
         setUser(serverUser)
       }),
-    [userId]
+    [userId, api]
   )
 
   const fetchUserTweets = useCallback(
@@ -56,7 +56,7 @@ export default function UserProfile({ userId }: { userId: string }) {
           return [...current, ...newTweets]
         })
       }),
-    [page, userId]
+    [page, userId, api]
   )
 
   const onRefresh = () => {
@@ -79,7 +79,7 @@ export default function UserProfile({ userId }: { userId: string }) {
   useEffect(() => {
     if (!userId) return
     else fetchUserTweets()
-  }, [page, user, fetchUserTweets])
+  }, [userId, fetchUserTweets])
 
   return (
     <View style={pageStyles.container}>

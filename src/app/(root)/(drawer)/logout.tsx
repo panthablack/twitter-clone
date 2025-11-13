@@ -4,10 +4,8 @@ import React, { useEffect } from 'react'
 import { ActivityIndicator, View } from 'react-native'
 
 export default function LoginScreen() {
-  const authStore = useAuthStore()
-
   useEffect(() => {
-    authStore.logOut()
+    useAuthStore.getState().logOut()
   }, [])
 
   return (

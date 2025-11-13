@@ -4,7 +4,7 @@ import { useAuthStore } from '@//store/authStore'
 import ValidationErrors from '@/components/ValidationErrors'
 import { Link } from 'expo-router'
 import React, { useState } from 'react'
-import { TextInput, View } from 'react-native'
+import { Text, TextInput, View } from 'react-native'
 
 export default function LoginScreen() {
   const authStore = useAuthStore()
@@ -16,6 +16,7 @@ export default function LoginScreen() {
       <AppText center size="heading">
         Login Screen
       </AppText>
+      <Text className="font-bold text-2xl text-twitter-blue">Some test text</Text>
       <TextInput
         onChangeText={setEmail}
         value={email}

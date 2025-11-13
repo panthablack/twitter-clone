@@ -1,5 +1,5 @@
 import { useBootStore } from '@//store/bootStore'
-import '@/styles/global.css'
+import '@/styles/index.css'
 import { Stack } from 'expo-router'
 import React, { useEffect } from 'react'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'

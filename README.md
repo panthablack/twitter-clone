@@ -97,7 +97,7 @@ Global state is managed with [Zustand](https://github.com/pmndrs/zustand) in `sr
 
 ### Styling
 
-Uses [NativeWind](https://www.nativewind.dev/) for Tailwind CSS integration with React Native. Global styles are in `src/styles/global.css`.
+Uses [NativeWind](https://www.nativewind.dev/) for Tailwind CSS integration with React Native. Global styles are in `src/styles/index.css`.
 
 ### Type Safety
 
