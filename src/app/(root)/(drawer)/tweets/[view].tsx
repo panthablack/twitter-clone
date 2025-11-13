@@ -1,6 +1,6 @@
 import ProfileAvatar from '@//components/ProfileAvatar'
 import { styles } from '@//styles/styles'
-import { api } from '@//utilities/api'
+import { useApi } from '@/hooks/useApi'
 import Entypo from '@expo/vector-icons/Entypo'
 import EvilIcons from '@expo/vector-icons/EvilIcons'
 import { format } from 'date-fns'
@@ -11,6 +11,7 @@ import { ActivityIndicator, Platform, StyleSheet, Text, TouchableOpacity, View }
 export default function ViewTweetScreen() {
   const params = useLocalSearchParams()
   const router = useRouter()
+  const { api } = useApi()
 
   const [tweet, setTweet] = useState(null as Tweet | null)
   const [isLoading, setIsLoading] = useState(true as boolean)
@@ -27,8 +28,8 @@ export default function ViewTweetScreen() {
     api(`/tweets/${params.view}`)
       .then(res => {
         setTweet({
-          ...res.data,
-          time: res.data.created_at,
+          ...(res?.data || {}),
+          time: res?.data.created_at,
         })
       })
       .finally(() => setIsLoading(false))

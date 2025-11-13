@@ -1,6 +1,6 @@
 import ProfileAvatar from '@//components/ProfileAvatar'
 import { FAKE_AUTH_USER } from '@//constants/fakeData'
-import { api } from '@//utilities/api'
+import { useApi } from '@/hooks/useApi'
 import { useRouter } from 'expo-router'
 import { useState } from 'react'
 import {
@@ -14,6 +14,7 @@ import {
 
 export default function CreateTweetScreen() {
   const router = useRouter()
+  const { api } = useApi()
 
   const [newTweet, setNewTweet] = useState('')
   const [isLoading, setIsLoading] = useState(false)

@@ -1,6 +1,7 @@
 import { AppText } from '@//components/AppText'
 import { Button } from '@//components/Button'
 import { useAuthStore } from '@//store/authStore'
+import ValidationErrors from '@/components/ValidationErrors'
 import { Link } from 'expo-router'
 import React, { useState } from 'react'
 import { TextInput, View } from 'react-native'
@@ -24,6 +25,8 @@ export default function LoginScreen() {
         keyboardType="email-address"
         autoCapitalize="none"
       />
+      <ValidationErrors name="email" />
+
       <TextInput
         onChangeText={setPassword}
         value={password}
@@ -33,6 +36,7 @@ export default function LoginScreen() {
         autoCapitalize="none"
         secureTextEntry={true}
       />
+      <ValidationErrors name="password" />
 
       <Button
         isLoading={authStore.isLoading}

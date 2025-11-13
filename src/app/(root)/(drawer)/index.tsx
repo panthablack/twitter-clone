@@ -1,5 +1,5 @@
 import TweetList from '@//components/TweetList'
-import { api } from '@//utilities/api'
+import { useApi } from '@/hooks/useApi'
 import AntDesign from '@expo/vector-icons/AntDesign'
 import { useRouter } from 'expo-router'
 import { useCallback, useEffect, useState } from 'react'
@@ -9,6 +9,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 export default function HomeScreen() {
   const insets = useSafeAreaInsets()
   const router = useRouter()
+  const { api } = useApi()
   const [tweets, setTweets] = useState([] as Tweet[])
   const [isLoading, setIsLoading] = useState(true as boolean)
   const [refreshing, setRefreshing] = useState(false as boolean)

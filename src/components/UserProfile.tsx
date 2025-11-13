@@ -1,6 +1,6 @@
 import TweetList from '@//components/TweetList'
-import { api } from '@//utilities/api'
 import { getHumanReadableTimeToNow } from '@//utilities/dates'
+import { useApi } from '@/hooks/useApi'
 import EvilIcons from '@expo/vector-icons/EvilIcons'
 import { useCallback, useEffect, useState } from 'react'
 import {
@@ -21,6 +21,7 @@ export default function UserProfile({ userId }: { userId: string }) {
   const [refreshing, setRefreshing] = useState(false as boolean)
   const [page, setPage] = useState(1 as number)
   const [paginationLimitReached, setPaginationLimitReached] = useState(false as boolean)
+  const { api } = useApi()
 
   const fetchUser = useCallback(
     async () =>
