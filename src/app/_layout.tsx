@@ -8,7 +8,7 @@ export default function RootLayout() {
   const bootStore = useBootStore()
 
   useEffect(() => {
-    bootStore.onBoot()
+    useBootStore.getState().onBoot()
   }, [])
 
   return (
