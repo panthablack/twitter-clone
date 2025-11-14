@@ -15,6 +15,7 @@ export default function HomeScreen() {
   const [refreshing, setRefreshing] = useState(false as boolean)
   const [page, setPage] = useState(1 as number)
   const [paginationLimitReached, setPaginationLimitReached] = useState(false as boolean)
+  const [refreshTrigger, setRefreshTrigger] = useState(0 as number)
 
   const fetchAllTweets = useCallback(
     async () =>
@@ -45,10 +46,12 @@ export default function HomeScreen() {
   )
 
   const onRefresh = async () => {
-    await setRefreshing(true)
-    await setTweets([])
-    await setPaginationLimitReached(false)
+    if (refreshing) return
+    setRefreshing(true)
+    setTweets([])
+    setPaginationLimitReached(false)
     setPage(1)
+    setRefreshTrigger(prev => prev + 1)
   }
 
   const onEndReached = () => {
@@ -60,7 +63,7 @@ export default function HomeScreen() {
     fetchAllTweets().finally(() => {
       setIsLoading(false)
     })
-  }, [page, fetchAllTweets])
+  }, [page, fetchAllTweets, refreshTrigger])
 
   const goToCreateTweet = () => {
     router.navigate({
