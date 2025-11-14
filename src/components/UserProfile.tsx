@@ -100,7 +100,7 @@ export default function UserProfile({ userId }: { userId: string }) {
                 source={
                   user.avatar_url
                     ? { uri: user.avatar_url }
-                    : require('@/assets/images/default-avatar.svg')
+                    : require('@/assets/images/default-avatar.png')
                 }
               />
               <TouchableOpacity style={profileStyles.followButton}>

@@ -21,7 +21,7 @@ export default function ProfileAvatar({ user }: AvatarProps) {
       <Image
         style={profileStyles.avatar}
         source={
-          user.avatar_url ? { uri: user.avatar_url } : require('@/assets/images/default-avatar.svg')
+          user.avatar_url ? { uri: user.avatar_url } : require('@/assets/images/default-avatar.png')
         }
       />
     </TouchableOpacity>
