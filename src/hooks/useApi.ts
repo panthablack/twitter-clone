@@ -1,4 +1,5 @@
 import { API_ROOT_URL } from '@//constants/networking'
+import { useAuthStore } from '@/store/authStore'
 import { useErrorStore } from '@/store/errorStore'
 import { LaravelErrorResponse } from '@/types/api'
 import axios, { AxiosError, AxiosRequestConfig } from 'axios'
@@ -26,6 +27,12 @@ export const useApi = () => {
     )
   }, [])
 
+  const handleUnauthorisedError = useCallback(async (e: AxiosError) => {
+    console.log('API Auth Error: ', e)
+    useErrorStore.getState().resetValidationErrors()
+    useAuthStore.getState().resetAuth()
+  }, [])
+
   const api = useCallback(
     async (url: string, config: AxiosRequestConfig = {}) =>
       await axios
@@ -40,9 +47,10 @@ export const useApi = () => {
         })
         .catch((e: AxiosError) => {
           if (e?.status === 422) handleValidationError(e)
+          else if (e?.status === 401) handleUnauthorisedError(e)
           else handleApiError(e)
         }),
-    [handleApiError, handleValidationError]
+    [handleApiError, handleValidationError, handleUnauthorisedError]
   )
   return { api }
 }
