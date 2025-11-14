@@ -18,7 +18,12 @@ export default function ProfileAvatar({ user }: AvatarProps) {
 
   return (
     <TouchableOpacity style={styles.utility.flexRow} onPress={() => goToProfile(String(user.id))}>
-      <Image style={profileStyles.avatar} source={{ uri: user.avatar_url }} />
+      <Image
+        style={profileStyles.avatar}
+        source={
+          user.avatar_url ? { uri: user.avatar_url } : require('@/assets/images/default-avatar.svg')
+        }
+      />
     </TouchableOpacity>
   )
 }

@@ -97,7 +97,11 @@ export default function UserProfile({ userId }: { userId: string }) {
             <View style={profileStyles.avatarContainer}>
               <Image
                 style={profileStyles.avatar}
-                source={{ uri: user.avatar_url || require('@/assets/images/default-avatar.svg') }}
+                source={
+                  user.avatar_url
+                    ? { uri: user.avatar_url }
+                    : require('@/assets/images/default-avatar.svg')
+                }
               />
               <TouchableOpacity style={profileStyles.followButton}>
                 <Text style={profileStyles.followButtonText}>Follow</Text>

@@ -1,6 +1,6 @@
 import ProfileAvatar from '@//components/ProfileAvatar'
-import { FAKE_AUTH_USER } from '@//constants/fakeData'
 import { useApi } from '@/hooks/useApi'
+import { useAuthStore } from '@/store/authStore'
 import { useRouter } from 'expo-router'
 import { useState } from 'react'
 import {
@@ -15,10 +15,10 @@ import {
 export default function CreateTweetScreen() {
   const router = useRouter()
   const { api } = useApi()
+  const authStore = useAuthStore()
 
   const [newTweet, setNewTweet] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const [authUser] = useState({ ...FAKE_AUTH_USER })
 
   const goToTweet = (id: string) => {
     router.navigate({
@@ -40,36 +40,40 @@ export default function CreateTweetScreen() {
 
   return (
     <View style={pageStyles.container}>
-      <View style={formStyles.container}>
-        <View style={inputStyles.container}>
-          <ProfileAvatar user={authUser} />
-          <TextInput
-            multiline={true}
-            onChangeText={setNewTweet}
-            value={newTweet}
-            placeholder="What's happening?"
-            placeholderTextColor="gray"
-            style={inputStyles.textarea}
-            maxLength={280}
-          />
+      {authStore.authUser ? (
+        <View style={formStyles.container}>
+          <View style={inputStyles.container}>
+            <ProfileAvatar user={authStore.authUser} />
+            <TextInput
+              multiline={true}
+              onChangeText={setNewTweet}
+              value={newTweet}
+              placeholder="What's happening?"
+              placeholderTextColor="gray"
+              style={inputStyles.textarea}
+              maxLength={280}
+            />
+          </View>
+          <View style={footerStyles.container}>
+            <Text style={pageStyles.charsRemainingtext}>
+              Characters remaining: {280 - newTweet.length}
+            </Text>
+            {isLoading ? (
+              <ActivityIndicator size="small" />
+            ) : (
+              <TouchableOpacity
+                style={createButtonStyles.container}
+                onPress={() => sendTweet(newTweet)}
+                disabled={isLoading || newTweet.length <= 0}
+              >
+                <Text style={createButtonStyles.text}>Tweet</Text>
+              </TouchableOpacity>
+            )}
+          </View>
         </View>
-        <View style={footerStyles.container}>
-          <Text style={pageStyles.charsRemainingtext}>
-            Characters remaining: {280 - newTweet.length}
-          </Text>
-          {isLoading ? (
-            <ActivityIndicator size="small" />
-          ) : (
-            <TouchableOpacity
-              style={createButtonStyles.container}
-              onPress={() => sendTweet(newTweet)}
-              disabled={isLoading || newTweet.length <= 0}
-            >
-              <Text style={createButtonStyles.text}>Tweet</Text>
-            </TouchableOpacity>
-          )}
-        </View>
-      </View>
+      ) : (
+        <></>
+      )}
     </View>
   )
 }
