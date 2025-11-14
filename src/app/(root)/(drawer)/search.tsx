@@ -6,7 +6,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { ActivityIndicator, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-export default function HomeScreen() {
+export default function SearchScreen() {
   const insets = useSafeAreaInsets()
   const router = useRouter()
   const { api } = useApi()
@@ -18,7 +18,7 @@ export default function HomeScreen() {
 
   const fetchAllTweets = useCallback(
     async () =>
-      await api(`/followed-tweets?page=${page}`)
+      await api(`/tweets?page=${page}`)
         .then(res => {
           if (res?.data?.next_page_url === null) setPaginationLimitReached(true)
           const mapped: Tweet[] = (res?.data?.data || []).map((i: Record<string, any>) => ({

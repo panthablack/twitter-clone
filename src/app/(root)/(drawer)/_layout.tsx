@@ -10,6 +10,12 @@ export default function DrawerLayout() {
         }}
       />
       <Drawer.Screen
+        name="search"
+        options={{
+          title: 'Search',
+        }}
+      />
+      <Drawer.Screen
         name="profile/[user]"
         options={{ drawerItemStyle: { display: 'none' }, title: 'Profile' }}
       />
