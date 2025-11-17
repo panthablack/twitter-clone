@@ -28,7 +28,7 @@ export default function TweetList({
               <ActivityIndicator size="large" />
             </View>
           ) : (
-            ''
+            <></>
           )
         }
       />
