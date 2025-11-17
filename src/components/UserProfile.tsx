@@ -1,6 +1,7 @@
 import TweetList from '@//components/TweetList'
 import { getHumanReadableTimeToNow } from '@//utilities/dates'
 import { useApi } from '@/hooks/useApi'
+import { useAuthStore } from '@/store/authStore'
 import EvilIcons from '@expo/vector-icons/EvilIcons'
 import { useCallback, useEffect, useState } from 'react'
 import {
@@ -17,19 +18,35 @@ import {
 export default function UserProfile({ userId }: { userId: string }) {
   const [user, setUser] = useState(null as User | null)
   const [tweets, setTweets] = useState([] as Tweet[])
-  const [isLoading, setIsLoading] = useState(true as boolean)
-  const [refreshing, setRefreshing] = useState(false as boolean)
+  const [isLoading, setIsLoading] = useState(true)
+  const [refreshing, setRefreshing] = useState(false)
   const [page, setPage] = useState(1 as number)
-  const [paginationLimitReached, setPaginationLimitReached] = useState(false as boolean)
+  const [following, setFollowing] = useState(false)
+  const [togglingFollow, setTogglingFollow] = useState(false)
+  const [paginationLimitReached, setPaginationLimitReached] = useState(false)
   const { api } = useApi()
+
+  const toggleFollow = async () => {
+    if (!user?.id) throw 'Cannot toggle follow without user.'
+    const action = following ? 'unfollow' : 'follow'
+    await setTogglingFollow(true)
+    await api(`/users/${user.id}/${action}`)
+      .then(() => setFollowing(!following))
+      .finally(() => setTogglingFollow(false))
+  }
+
+  const getIsFollowing = useCallback(async () => {
+    if (!user?.id || !useAuthStore.getState().isAuthenticated()) return
+    await api(`/users/${user.id}/followed-by-auth-user`).then(res =>
+      setFollowing(!!res?.data?.followed)
+    )
+  }, [user, api])
 
   const fetchUser = useCallback(
     async () =>
       await api(`/users/${userId}`).then(res => {
         setTweets([])
-
         const serverUser = (res?.data as User) || null
-
         setUser(serverUser)
       }),
     [userId, api]
@@ -73,8 +90,13 @@ export default function UserProfile({ userId }: { userId: string }) {
 
   useEffect(() => {
     setIsLoading(true)
-    fetchUser().finally(() => setIsLoading(false))
+    fetchUser()
   }, [userId, fetchUser])
+
+  useEffect(() => {
+    setIsLoading(true)
+    getIsFollowing().finally(() => setIsLoading(false))
+  }, [user, getIsFollowing])
 
   useEffect(() => {
     if (!userId) return
@@ -103,8 +125,20 @@ export default function UserProfile({ userId }: { userId: string }) {
                     : require('@/assets/images/default-avatar.png')
                 }
               />
-              <TouchableOpacity style={profileStyles.followButton}>
-                <Text style={profileStyles.followButtonText}>Follow</Text>
+              <TouchableOpacity
+                style={profileStyles.followButton}
+                onPress={() => toggleFollow()}
+                disabled={togglingFollow}
+              >
+                {togglingFollow ? (
+                  <Text style={profileStyles.followButtonText}>
+                    <ActivityIndicator size="small" />
+                  </Text>
+                ) : (
+                  <Text style={profileStyles.followButtonText}>
+                    {following ? 'Unfollow' : 'Follow'}
+                  </Text>
+                )}
               </TouchableOpacity>
             </View>
             <View style={profileStyles.nameContainer}>
